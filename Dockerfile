@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Stage 1: Dependencies installation
 # ------------------------------------------------------------------------------
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 
 # Install build dependencies if needed (e.g. libc6-compat for alpine)
