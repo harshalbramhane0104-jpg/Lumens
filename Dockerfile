@@ -48,6 +48,9 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
+ENV SUPABASE_URL=https://rngrlnppxicovgqaysdt.supabase.co
+ENV SUPABASE_PUBLISHABLE_KEY=sb_publishable_r3QQyufjmhgV6MMnesFF9A_lzLD0vMh
+
 # Run container as non-root user for security
 USER node
 
