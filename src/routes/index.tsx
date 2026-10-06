@@ -1,3 +1,4 @@
+import { Logo } from "@/components/Logo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Ambient } from "@/components/Ambient";
 import coding from "@/assets/thumb-coding.jpg";
@@ -29,9 +30,7 @@ function Index() {
       <Ambient />
       <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-8">
         <header className="flex items-center gap-3">
-          <div className="grid size-10 place-items-center rounded-xl bg-gradient-brand font-display text-lg font-bold">
-            L
-          </div>
+          <Logo className="size-10" />
           <p className="font-display text-lg font-bold">Lumen</p>
           <Link to="/auth" className="glass ml-auto rounded-xl px-4 py-2 text-sm">
             Sign in

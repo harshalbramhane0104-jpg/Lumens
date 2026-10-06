@@ -1,3 +1,4 @@
+import { Logo } from "./Logo";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,9 +16,7 @@ export function Shell({ name, children }: { name: string; children: ReactNode })
         <aside className="hidden w-64 shrink-0 p-4 md:flex">
           <div className="glass sticky top-4 flex h-[calc(100vh-2rem)] w-full flex-col rounded-2xl p-5">
             <div className="flex items-center gap-3 px-1">
-              <div className="grid size-10 place-items-center rounded-xl bg-gradient-brand font-display text-lg font-bold shadow-lg shadow-brand/40">
-                L
-              </div>
+              <Logo className="size-10 drop-shadow-lg" />
               <div>
                 <p className="font-display text-lg font-bold leading-none tracking-tight">Lumen</p>
                 <p className="text-[11px] tracking-wide text-muted-foreground">

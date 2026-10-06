@@ -1,3 +1,4 @@
+import { Logo } from "@/components/Logo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -72,9 +73,7 @@ function AuthPage() {
     <div className="relative grid min-h-screen place-items-center px-4">
       <Ambient />
       <div className="glass relative w-full max-w-sm rounded-3xl p-8 animate-rise">
-        <div className="grid size-11 place-items-center rounded-xl bg-gradient-brand font-display text-lg font-bold">
-          L
-        </div>
+        <Logo className="size-11" />
         <h1 className="mt-5 font-display text-2xl font-bold">
           {mode === "in" ? "Welcome back" : "Create your account"}
         </h1>
