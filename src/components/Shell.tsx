@@ -45,7 +45,7 @@ export function Shell({ name, children }: { name: string; children: ReactNode })
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-foreground/10">
                 <div className="h-full w-2/3 rounded-full bg-gradient-brand animate-grow" />
               </div>
-              <p className="mt-2 text-[11px] text-muted-foreground">Streams via S3 signed links</p>
+              <p className="mt-2 text-[11px] text-muted-foreground">Smooth, reliable playback</p>
             </div>
           </div>
         </aside>

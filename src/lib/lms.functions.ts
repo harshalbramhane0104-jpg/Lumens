@@ -102,31 +102,7 @@ export const getLecture = createServerFn({ method: "GET" })
       .eq("lecture_id", data.id)
       .maybeSingle();
 
-    let streamUrl: string | null = l.fallback_url;
-    let source: "s3" | "demo" | "none" = streamUrl ? "demo" : "none";
-    const lovableKey = process.env["LOVABLE_API_KEY"];
-    const s3Key = process.env["AWS_S3_API_KEY"];
-    if (l.s3_key && lovableKey && s3Key) {
-      const res = await fetch(
-        "https://connector-gateway.lovable.dev/api/v1/sign_storage_url?provider=aws_s3&mode=read",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${lovableKey}`,
-            "X-Connection-Api-Key": s3Key,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ object_path: l.s3_key }),
-        },
-      );
-      if (res.ok) {
-        const j = (await res.json()) as { url: string };
-        streamUrl = j.url;
-        source = "s3";
-      } else {
-        console.error(`S3 sign failed [${res.status}]: ${await res.text()}`);
-      }
-    }
+    const streamUrl: string | null = l.fallback_url;
     const lectureData = l as unknown as { courses?: CourseInfo | CourseInfo[] | null };
     const course = Array.isArray(lectureData.courses)
       ? lectureData.courses[0]
@@ -142,7 +118,6 @@ export const getLecture = createServerFn({ method: "GET" })
         },
       },
       streamUrl,
-      source,
       progress: p ?? { percent: 0, position_seconds: 0 },
     };
   });

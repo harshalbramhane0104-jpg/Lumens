@@ -30,7 +30,7 @@ function LecturePage() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(lectureQuery(id));
   const qc = useQueryClient();
-  const { lecture, streamUrl, source, progress } = data;
+  const { lecture, streamUrl, progress } = data;
   const k = kindOf(lecture.kind);
   const lastSave = useRef(0);
   const [pct, setPct] = useState(progress.percent);
@@ -90,13 +90,6 @@ function LecturePage() {
               <span className="text-muted-foreground">
                 {lecture.course?.title} · {lecture.course?.instructor}
               </span>
-              {streamUrl && (
-                <span className="ml-auto text-muted-foreground">
-                  {source === "s3"
-                    ? "Streaming from S3"
-                    : "Demo stream — connect S3 to serve your own videos"}
-                </span>
-              )}
             </div>
             <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">{lecture.title}</h1>
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-foreground/10">
