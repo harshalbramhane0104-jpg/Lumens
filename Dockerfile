@@ -22,15 +22,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build-time environment variables for client-side bundling
-ARG VITE_SUPABASE_PROJECT_ID=rngrlnppxicovgqaysdt
-ARG VITE_SUPABASE_URL=https://rngrlnppxicovgqaysdt.supabase.co
-ARG VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_r3QQyufjmhgV6MMnesFF9A_lzLD0vMh
-
-ENV VITE_SUPABASE_PROJECT_ID=${VITE_SUPABASE_PROJECT_ID}
-ENV VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
-ENV VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
-
 # Instruct Nitro to build a standalone Node.js server
 ENV NITRO_PRESET=node-server
 ENV NODE_ENV=production

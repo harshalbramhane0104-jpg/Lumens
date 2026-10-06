@@ -1,28 +1,28 @@
 services:
+  backend:
+    build:
+      context: ./backend
+    container_name: lumens-backend
+    restart: unless-stopped
+    expose:
+      - "4000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - PORT=4000
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID:-rngrlnppxicovgqaysdt}
-        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-https://rngrlnppxicovgqaysdt.supabase.co}
-        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY:-sb_publishable_r3QQyufjmhgV6MMnesFF9A_lzLD0vMh}
     container_name: lumens-app
     restart: unless-stopped
     expose:
       - "3000"
-    env_file:
-      - path: .env
-        required: false
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3000
-      - SUPABASE_URL=${SUPABASE_URL:-https://rngrlnppxicovgqaysdt.supabase.co}
-      - SUPABASE_PUBLISHABLE_KEY=${SUPABASE_PUBLISHABLE_KEY:-sb_publishable_r3QQyufjmhgV6MMnesFF9A_lzLD0vMh}
-      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-https://rngrlnppxicovgqaysdt.supabase.co}
-      - VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY:-sb_publishable_r3QQyufjmhgV6MMnesFF9A_lzLD0vMh}
-      - VITE_SUPABASE_PROJECT_ID=${VITE_SUPABASE_PROJECT_ID:-rngrlnppxicovgqaysdt}
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/ || exit 1"]
       interval: 30s
@@ -39,5 +39,5 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      app:
-        condition: service_healthy
+      - backend
+      - app

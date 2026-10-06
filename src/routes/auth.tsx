@@ -2,8 +2,7 @@ import { Logo } from "@/components/Logo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { api, getToken, setToken } from "@/lib/api";
 import { Ambient } from "@/components/Ambient";
 
 export const Route = createFileRoute("/auth")({
@@ -27,43 +26,33 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
-    });
-    const { data } = supabase.auth.onAuthStateChange((_e, s) => {
-      if (s) navigate({ to: "/dashboard" });
-    });
-    return () => data.subscription.unsubscribe();
+    if (!getToken()) return;
+    api("/auth/me")
+      .then(() => navigate({ to: "/dashboard" }))
+      .catch(() => {});
   }, [navigate]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "up") {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin + "/auth", data: { full_name: name } },
-        });
-        if (error) throw error;
-        if (!data.session) toast.success("Check your email to confirm your account.");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      }
+      const res =
+        mode === "up"
+          ? await api<{ token: string }>("/auth/signup", {
+              method: "POST",
+              body: { email, password, name },
+            })
+          : await api<{ token: string }>("/auth/login", {
+              method: "POST",
+              body: { email, password },
+            });
+      setToken(res.token);
+      navigate({ to: "/dashboard" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setBusy(false);
     }
-  }
-
-  async function google() {
-    const r = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/auth",
-    });
-    if (r.error) toast.error(r.error.message ?? "Google sign-in failed");
   }
 
   const input =
@@ -80,18 +69,7 @@ function AuthPage() {
         <p className="mt-1 text-sm text-muted-foreground">
           Your progress is saved to your account.
         </p>
-        <button
-          onClick={google}
-          className="glass mt-6 w-full rounded-xl py-2.5 text-sm font-medium hover:bg-foreground/10"
-        >
-          Continue with Google
-        </button>
-        <div className="my-5 flex items-center gap-3 text-[11px] text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or
-          <span className="h-px flex-1 bg-border" />
-        </div>
-        <form onSubmit={submit} className="space-y-3">
+        <form onSubmit={submit} className="mt-6 space-y-3">
           {mode === "up" && (
             <input
               className={input}

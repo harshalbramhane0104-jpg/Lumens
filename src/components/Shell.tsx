@@ -1,7 +1,7 @@
 import { Logo } from "./Logo";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { setToken } from "@/lib/api";
 import { Ambient } from "./Ambient";
 
 const nav = [{ label: "Dashboard", icon: "▦", to: "/dashboard" as const }];
@@ -58,8 +58,8 @@ export function Shell({ name, children }: { name: string; children: ReactNode })
               />
             </div>
             <button
-              onClick={async () => {
-                await supabase.auth.signOut();
+              onClick={() => {
+                setToken(null);
                 navigate({ to: "/auth" });
               }}
               className="glass hidden rounded-xl px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground sm:block"
