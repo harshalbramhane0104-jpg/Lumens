@@ -1,3 +1,6 @@
+# Backend has its own Dockerfile and build context
+backend
+
 # Dependencies and build outputs
 node_modules
 .output
